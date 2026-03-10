@@ -193,6 +193,7 @@ text-decoration:none;
 color:#00ff9c;
 transition:0.3s;
 cursor:pointer;
+background:none;
 }
 
 .button:hover{
@@ -259,8 +260,6 @@ background:#00ff9c;
 color:black;
 }
 
-/* CLOSE BUTTON */
-
 .closeBtn{
 position:absolute;
 top:8px;
@@ -272,8 +271,6 @@ font-size:18px;
 .closeBtn:hover{
 text-shadow:0 0 10px #00ff9c;
 }
-
-/* CHECKING TEXT */
 
 #checking{
 margin-top:12px;
@@ -333,14 +330,11 @@ Features:
 <br>• Auto Shoot
 </div>
 
-<a class="button" onclick="openPassword('shadowhub.html','ShadowsMM2Hub1')">Get Script</a>
+<button class="button" onclick="openPassword('mm2')">Get Script</button>
 
 </div>
 
 <!-- FREE SCRIPT -->
-
-
-
 
 <div class="card">
 
@@ -355,13 +349,14 @@ Features:
 <br>• X Ray
 <br>• Multiple ESP'S
 <br>• Stealer
-<br>• Anti ragdoll 
+<br>• Anti ragdoll
 <br>• Inf Jump
 <br>• And ALOT MORE!
 </div>
 
 <a class="button" href="Chilli-Hub.html">Get Script</a>
 
+</div>
 
 </div>
 </div>
@@ -403,42 +398,66 @@ setTimeout(()=>{
 
 /* PASSWORD SYSTEM */
 
-let targetPage = "";
-let correctPassword = "";
+let currentHub = "";
 
-function openPassword(page,password){
-
-targetPage = page;
-correctPassword = password;
-
+function openPassword(hub){
+currentHub = hub;
 document.getElementById("passwordBox").style.display="block";
-
 }
 
 function closePassword(){
 document.getElementById("passwordBox").style.display="none";
 }
 
+/* HUB DATABASE */
+
+const HUBS = {
+
+mm2:{
+password:"1",
+page:"shadowhub.html"
+}
+
+
+
+};
+
+/* CHECK PASSWORD */
+
 function checkPassword(){
 
 let password = document.getElementById("pass").value;
 let checking = document.getElementById("checking");
 
-checking.style.display = "block";
+checking.style.display="block";
 
-setTimeout(function(){
+setTimeout(()=>{
 
-if(password === correctPassword){
-window.location.href = targetPage;
+let hub = HUBS[currentHub];
+
+if(hub && password === hub.password){
+
+sessionStorage.setItem("shadow_access","granted");
+window.location.href = hub.page;
+
 }
+
 else{
-checking.style.display = "none";
+
+checking.style.display="none";
 alert("ACCESS DENIED");
-}
-
-},1500)
 
 }
+
+},1200);
+
+}
+
+document.getElementById("pass").addEventListener("keypress",function(e){
+if(e.key==="Enter"){
+checkPassword();
+}
+});
 
 /* MATRIX BACKGROUND */
 
@@ -454,25 +473,24 @@ const columns = canvas.width / fontSize;
 
 const drops = [];
 
-for(let x = 0; x < columns; x++)
-drops[x] = 1;
+for(let x=0;x<columns;x++) drops[x]=1;
 
 function draw(){
 
-ctx.fillStyle = "rgba(0,0,0,0.05)";
+ctx.fillStyle="rgba(0,0,0,0.05)";
 ctx.fillRect(0,0,canvas.width,canvas.height);
 
-ctx.fillStyle = "#00ff9c";
-ctx.font = fontSize + "px monospace";
+ctx.fillStyle="#00ff9c";
+ctx.font=fontSize+"px monospace";
 
-for(let i = 0; i < drops.length; i++){
+for(let i=0;i<drops.length;i++){
 
 const text = letters.charAt(Math.floor(Math.random()*letters.length));
 
-ctx.fillText(text, i*fontSize, drops[i]*fontSize);
+ctx.fillText(text,i*fontSize,drops[i]*fontSize);
 
-if(drops[i]*fontSize > canvas.height && Math.random() > 0.975)
-drops[i] = 0;
+if(drops[i]*fontSize>canvas.height && Math.random()>0.975)
+drops[i]=0;
 
 drops[i]++;
 
@@ -481,6 +499,21 @@ drops[i]++;
 }
 
 setInterval(draw,33);
+
+/* DEVTOOLS BLOCK */
+
+document.addEventListener("contextmenu",function(e){
+e.preventDefault();
+});
+
+document.addEventListener("keydown",function(e){
+
+if(e.key==="F12"){e.preventDefault();}
+if(e.ctrlKey && e.shiftKey && e.key==="I"){e.preventDefault();}
+if(e.ctrlKey && e.shiftKey && e.key==="C"){e.preventDefault();}
+if(e.ctrlKey && e.key==="U"){e.preventDefault();}
+
+});
 
 </script>
 

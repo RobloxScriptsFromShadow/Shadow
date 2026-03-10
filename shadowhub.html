@@ -6,6 +6,17 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Orbitron&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 
+<script>
+
+/* ACCESS PROTECTION */
+
+if(sessionStorage.getItem("shadow_access") !== "granted"){
+document.body.innerHTML = "<h1 style='color:red;text-align:center;margin-top:100px;'>ACCESS DENIED</h1>";
+throw new Error("Access Denied");
+}
+
+</script>
+
 <style>
 
 body{
@@ -17,7 +28,7 @@ padding:60px;
 overflow-x:hidden;
 }
 
-/* MATRIX BACKGROUND */
+/* MATRIX */
 
 .matrix{
 position:fixed;
@@ -53,10 +64,12 @@ line-height:1.6;
 .scriptbox{
 background:#0a0a0a;
 border:1px solid #00ff9c;
-padding:20px;
+padding:25px;
 border-radius:10px;
 max-width:800px;
 }
+
+/* TEXTAREA */
 
 textarea{
 width:100%;
@@ -72,11 +85,12 @@ resize:none;
 
 button{
 margin-top:20px;
-padding:10px 22px;
+padding:12px 24px;
 background:black;
 color:#00ff9c;
 border:1px solid #00ff9c;
 cursor:pointer;
+font-family:'Share Tech Mono';
 }
 
 button:hover{
@@ -84,9 +98,54 @@ background:#00ff9c;
 color:black;
 }
 
+/* VERIFY TEXT */
+
+.verifyText{
+margin-top:15px;
+opacity:0.8;
+}
+
+.hidden{
+display:none;
+}
+
 </style>
 
 </head>
+
+
+
+<script>
+
+/* Disable Right Click */
+
+document.addEventListener("contextmenu", function(e){
+e.preventDefault();
+});
+
+/* Block common inspect shortcuts */
+
+document.addEventListener("keydown", function(e){
+
+if(e.key === "F12"){
+e.preventDefault();
+}
+
+if(e.ctrlKey && e.shiftKey && e.key === "I"){
+e.preventDefault();
+}
+
+if(e.ctrlKey && e.shiftKey && e.key === "C"){
+e.preventDefault();
+}
+
+if(e.ctrlKey && e.key === "U"){
+e.preventDefault();
+}
+
+});
+
+</script>
 <body>
 
 <canvas class="matrix"></canvas>
@@ -106,14 +165,59 @@ Features:
 </div>
 
 <div class="scriptbox">
-<textarea id="script">loadstring(game:HttpGet("https://pastebin.com/raw/ha5Da5WE"))()"()</textarea>
+
+<button id="verifyBtn" onclick="verifyServer()">Verify Server</button>
+
+<div id="verifyText" class="verifyText hidden">
+Connecting to Shadow Network...
 </div>
+
+<div id="scriptArea" class="hidden">
+
+<textarea id="script">loadstring(game:HttpGet("https://pastebin.com/raw/ha5Da5WE"))()</textarea>
 
 <button onclick="copyScript()">Copy Script</button>
 
+</div>
+
+</div>
+
 <script>
 
-/* COPY BUTTON */
+/* REMOVE ACCESS TOKEN AFTER LOAD */
+
+sessionStorage.removeItem("shadow_access");
+
+/* VERIFY SERVER ANIMATION */
+
+function verifyServer(){
+
+let btn = document.getElementById("verifyBtn");
+let text = document.getElementById("verifyText");
+
+btn.style.display = "none";
+text.classList.remove("hidden");
+
+setTimeout(()=>{
+text.innerText = "Authorizing user...";
+},1200);
+
+setTimeout(()=>{
+text.innerText = "Decrypting script...";
+},2500);
+
+setTimeout(()=>{
+text.innerText = "Access Granted";
+},3500);
+
+setTimeout(()=>{
+text.style.display="none";
+document.getElementById("scriptArea").classList.remove("hidden");
+},4200);
+
+}
+
+/* COPY SCRIPT */
 
 function copyScript(){
 
