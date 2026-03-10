@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>MM2 Shadow Hub</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
+<style>
+
+body{
+background:#050505;
+color:#00ff9c;
+font-family:'Share Tech Mono', monospace;
+margin:0;
+padding:60px;
+overflow-x:hidden;
+}
+
+/* MATRIX BACKGROUND */
+
+.matrix{
+position:fixed;
+top:0;
+left:0;
+z-index:-1;
+}
+
+/* HEADER */
+
+h1{
+font-family:'Orbitron';
+font-size:42px;
+margin-bottom:10px;
+}
+
+/* STATUS */
+
+.status{
+margin-bottom:20px;
+font-size:16px;
+}
+
+/* FEATURES */
+
+.features{
+margin-bottom:30px;
+line-height:1.6;
+}
+
+/* SCRIPT BOX */
+
+.scriptbox{
+background:#0a0a0a;
+border:1px solid #00ff9c;
+padding:20px;
+border-radius:10px;
+max-width:800px;
+}
+
+textarea{
+width:100%;
+height:120px;
+background:#050505;
+color:#00ff9c;
+border:none;
+font-family:monospace;
+resize:none;
+}
+
+/* BUTTON */
+
+button{
+margin-top:20px;
+padding:10px 22px;
+background:black;
+color:#00ff9c;
+border:1px solid #00ff9c;
+cursor:pointer;
+}
+
+button:hover{
+background:#00ff9c;
+color:black;
+}
+
+</style>
+
+</head>
+<body>
+
+<canvas class="matrix"></canvas>
+
+<h1>MM2 Shadow Hub</h1>
+
+<div class="status">
+Status: 🟢 Undetected
+</div>
+
+<div class="features">
+Features:
+<br>• ESP
+<br>• Role Detection
+<br>• Gun Notifier
+<br>• Auto Shoot
+</div>
+
+<div class="scriptbox">
+<textarea id="script">loadstring(game:HttpGet("https://pastebin.com/raw/YOURCODE"))()</textarea>
+</div>
+
+<button onclick="copyScript()">Copy Script</button>
+
+<script>
+
+/* COPY BUTTON */
+
+function copyScript(){
+
+var copyText = document.getElementById("script");
+copyText.select();
+copyText.setSelectionRange(0,99999);
+
+navigator.clipboard.writeText(copyText.value);
+
+alert("Script copied!");
+
+}
+
+/* MATRIX BACKGROUND */
+
+const canvas = document.querySelector(".matrix");
+const ctx = canvas.getContext("2d");
+
+canvas.height = window.innerHeight;
+canvas.width = window.innerWidth;
+
+const letters = "01";
+const fontSize = 14;
+const columns = canvas.width / fontSize;
+
+const drops = [];
+
+for(let x = 0; x < columns; x++)
+drops[x] = 1;
+
+function draw(){
+
+ctx.fillStyle = "rgba(0,0,0,0.05)";
+ctx.fillRect(0,0,canvas.width,canvas.height);
+
+ctx.fillStyle = "#00ff9c";
+ctx.font = fontSize + "px monospace";
+
+for(let i = 0; i < drops.length; i++){
+
+const text = letters.charAt(Math.floor(Math.random()*letters.length));
+
+ctx.fillText(text, i*fontSize, drops[i]*fontSize);
+
+if(drops[i]*fontSize > canvas.height && Math.random() > 0.975)
+drops[i] = 0;
+
+drops[i]++;
+
+}
+
+}
+
+setInterval(draw,33);
+
+</script>
+
+</body>
+</html>
