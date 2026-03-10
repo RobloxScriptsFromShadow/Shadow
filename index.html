@@ -4,7 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Shadow Scripts</title>
+
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
 <style>
 
 body{
@@ -16,6 +18,7 @@ overflow-x:hidden;
 }
 
 /* LOADING SCREEN */
+
 #loader{
 position:fixed;
 top:0;
@@ -44,6 +47,8 @@ from{opacity:0}
 to{opacity:1}
 }
 
+/* NAV */
+
 nav{
 display:flex;
 justify-content:space-between;
@@ -69,6 +74,8 @@ transition:0.3s;
 nav a:hover{
 text-shadow:0 0 10px #00ff9c;
 }
+
+/* HERO */
 
 .hero{
 height:60vh;
@@ -97,6 +104,8 @@ from{text-shadow:0 0 10px #00ff9c}
 to{text-shadow:0 0 30px #00ff9c}
 }
 
+/* SECTION */
+
 .section{
 padding:80px 10%;
 }
@@ -106,6 +115,8 @@ display:grid;
 grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
 gap:30px;
 }
+
+/* CARD */
 
 .card{
 background:#0a0a0a;
@@ -142,6 +153,22 @@ margin-top:0;
 font-family:'Orbitron';
 }
 
+/* PAID BADGE */
+
+.paidBadge{
+position:absolute;
+top:12px;
+right:12px;
+background:#ff0055;
+color:white;
+font-size:11px;
+padding:4px 8px;
+border-radius:6px;
+font-family:'Orbitron';
+}
+
+/* STATUS */
+
 .status{
 margin-top:5px;
 font-size:13px;
@@ -154,6 +181,8 @@ font-size:13px;
 opacity:0.85;
 }
 
+/* BUTTON */
+
 .button{
 display:inline-block;
 padding:10px 18px;
@@ -163,6 +192,7 @@ margin-top:15px;
 text-decoration:none;
 color:#00ff9c;
 transition:0.3s;
+cursor:pointer;
 }
 
 .button:hover{
@@ -171,11 +201,7 @@ color:black;
 box-shadow:0 0 10px #00ff9c;
 }
 
-.note{
-margin-top:10px;
-font-size:12px;
-opacity:0.6;
-}
+/* FOOTER */
 
 .footer{
 text-align:center;
@@ -184,6 +210,8 @@ opacity:0.5;
 border-top:1px solid #00ff9c22;
 }
 
+/* MATRIX */
+
 .matrix{
 position:fixed;
 top:0;
@@ -191,8 +219,72 @@ left:0;
 z-index:-1;
 }
 
+/* PASSWORD BOX */
+
+#passwordBox{
+display:none;
+position:fixed;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+background:#0a0a0a;
+border:1px solid #00ff9c;
+padding:35px;
+border-radius:10px;
+text-align:center;
+z-index:999;
+width:260px;
+}
+
+#passwordBox input{
+background:black;
+border:1px solid #00ff9c;
+color:#00ff9c;
+padding:10px;
+margin-top:10px;
+width:80%;
+}
+
+#passwordBox button{
+margin-top:15px;
+padding:10px 20px;
+background:black;
+border:1px solid #00ff9c;
+color:#00ff9c;
+cursor:pointer;
+}
+
+#passwordBox button:hover{
+background:#00ff9c;
+color:black;
+}
+
+/* CLOSE BUTTON */
+
+.closeBtn{
+position:absolute;
+top:8px;
+right:12px;
+cursor:pointer;
+font-size:18px;
+}
+
+.closeBtn:hover{
+text-shadow:0 0 10px #00ff9c;
+}
+
+/* CHECKING TEXT */
+
+#checking{
+margin-top:12px;
+font-size:13px;
+opacity:0.8;
+display:none;
+}
+
 </style>
 </head>
+
 <body>
 
 <div id="loader">
@@ -207,21 +299,25 @@ z-index:-1;
 <div class="logo">SHADOW SCRIPTS</div>
 <div>
 <a href="#scripts">Scripts</a>
-
 <a href="#contact">Contact</a>
 </div>
 </nav>
 
 <div class="hero">
 <h1>SHADOW HUB</h1>
-<p>Clean • Powerful • Undetected</p>
+<p>Scripts • Powerful • Undetected</p>
 </div>
 
 <div class="section" id="scripts">
 <h2>Scripts</h2>
+
 <div class="grid">
 
+<!-- PAID SCRIPT -->
+
 <div class="card">
+
+<div class="paidBadge">🔒 PAID</div>
 
 <h3>MM2 Shadow Hub</h3>
 
@@ -237,17 +333,11 @@ Features:
 <br>• Auto Shoot
 </div>
 
-<a class="button" href="shadowhub.html">Get Script</a>
-
-
-
-
-
-
-
+<a class="button" onclick="openPassword('shadowhub.html','ShadowsMM2Hub1')">Get Script</a>
 
 </div>
 
+<!-- FREE SCRIPT -->
 
 <div class="card">
 
@@ -264,12 +354,7 @@ Features:
 
 <a class="button" href="mm2-trade.html">Get Script</a>
 
-
-
-
 </div>
-
-
 
 </div>
 </div>
@@ -283,11 +368,72 @@ Features:
 © 2026 Shadow Scripts
 </div>
 
+<!-- PASSWORD BOX -->
+
+<div id="passwordBox">
+
+<div class="closeBtn" onclick="closePassword()">✖</div>
+
+<h3>Enter Password</h3>
+
+<input type="password" id="pass" placeholder="Password">
+
+<br>
+
+<button onclick="checkPassword()">Unlock</button>
+
+<div id="checking">Checking key validity...</div>
+
+</div>
+
 <script>
+
+/* LOADER */
 
 setTimeout(()=>{
  document.getElementById("loader").style.display="none";
 },3500)
+
+/* PASSWORD SYSTEM */
+
+let targetPage = "";
+let correctPassword = "";
+
+function openPassword(page,password){
+
+targetPage = page;
+correctPassword = password;
+
+document.getElementById("passwordBox").style.display="block";
+
+}
+
+function closePassword(){
+document.getElementById("passwordBox").style.display="none";
+}
+
+function checkPassword(){
+
+let password = document.getElementById("pass").value;
+let checking = document.getElementById("checking");
+
+checking.style.display = "block";
+
+setTimeout(function(){
+
+if(password === correctPassword){
+window.location.href = targetPage;
+}
+else{
+checking.style.display = "none";
+alert("ACCESS DENIED");
+}
+
+},1500)
+
+}
+
+/* MATRIX BACKGROUND */
 
 const canvas = document.querySelector(".matrix");
 const ctx = canvas.getContext("2d");
@@ -302,7 +448,7 @@ const columns = canvas.width / fontSize;
 const drops = [];
 
 for(let x = 0; x < columns; x++)
-    drops[x] = 1;
+drops[x] = 1;
 
 function draw(){
 
@@ -319,9 +465,9 @@ const text = letters.charAt(Math.floor(Math.random()*letters.length));
 ctx.fillText(text, i*fontSize, drops[i]*fontSize);
 
 if(drops[i]*fontSize > canvas.height && Math.random() > 0.975)
-    drops[i] = 0;
+drops[i] = 0;
 
- drops[i]++;
+drops[i]++;
 
 }
 
