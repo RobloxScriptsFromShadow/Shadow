@@ -414,37 +414,41 @@ document.getElementById("passwordBox").style.display="none";
 const HUBS = {
 
 mm2:{
-password:String.fromCharCode(49,49,51,77,77,50,83,72,65,68,49),
+hash:"dc973a2693d2f5c3c09f5d5512130ff632fa93f589bc9ff0ce5784ecbe5d2dca",
 page:"shadowhub.html"
+}
+
 }
 
 
 
-};
-
-/* CHECK PASSWORD */
-
-function checkPassword(){
+async function checkPassword(){
 
 let password = document.getElementById("pass").value;
 let checking = document.getElementById("checking");
 
-checking.style.display="block";
+checking.style.display = "block";
 
-setTimeout(()=>{
+const encoder = new TextEncoder();
+const data = encoder.encode(password);
+const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+
+const hashArray = Array.from(new Uint8Array(hashBuffer));
+const hashHex = hashArray.map(b => b.toString(16).padStart(2,'0')).join('');
 
 let hub = HUBS[currentHub];
 
-if(hub && password === hub.password){
+setTimeout(()=>{
+
+if(hub && hashHex === hub.hash){
 
 sessionStorage.setItem("shadow_access","granted");
 window.location.href = hub.page;
 
 }
-
 else{
 
-checking.style.display="none";
+checking.style.display = "none";
 alert("ACCESS DENIED");
 
 }
@@ -452,12 +456,6 @@ alert("ACCESS DENIED");
 },1200);
 
 }
-
-document.getElementById("pass").addEventListener("keypress",function(e){
-if(e.key==="Enter"){
-checkPassword();
-}
-});
 
 /* MATRIX BACKGROUND */
 
