@@ -2,7 +2,7 @@
 <html>
 <head>
 
-<title>MM2 Shadow Hub</title>
+<title>Chilli Hub (SAB)</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Orbitron&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 
@@ -84,6 +84,30 @@ background:#00ff9c;
 color:black;
 }
 
+/* COPY NOTIFICATION */
+
+#copyNotify{
+position:fixed;
+bottom:30px;
+right:30px;
+background:#0a0a0a;
+border:1px solid #00ff9c;
+color:#00ff9c;
+padding:14px 20px;
+border-radius:8px;
+font-family:'Share Tech Mono';
+box-shadow:0 0 10px #00ff9c33;
+opacity:0;
+transform:translateY(20px);
+transition:0.4s;
+z-index:9999;
+}
+
+#copyNotify.show{
+opacity:1;
+transform:translateY(0);
+}
+
 </style>
 
 </head>
@@ -102,7 +126,7 @@ Features:
 <br>• X Ray
 <br>• Multiple ESP'S
 <br>• Stealer
-<br>• Anti ragdoll 
+<br>• Anti ragdoll
 <br>• Inf Jump
 <br>• And ALOT MORE!
 </div>
@@ -113,9 +137,11 @@ Features:
 
 <button onclick="copyScript()">Copy Script</button>
 
+<div id="copyNotify">Script Copied ✔</div>
+
 <script>
 
-/* COPY BUTTON */
+/* COPY SCRIPT */
 
 function copyScript(){
 
@@ -125,7 +151,12 @@ copyText.setSelectionRange(0,99999);
 
 navigator.clipboard.writeText(copyText.value);
 
-alert("Script copied!");
+let notify = document.getElementById("copyNotify");
+notify.classList.add("show");
+
+setTimeout(()=>{
+notify.classList.remove("show");
+},2000);
 
 }
 
