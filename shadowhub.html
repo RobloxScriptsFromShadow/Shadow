@@ -115,6 +115,30 @@ opacity:0.8;
 display:none;
 }
 
+/* COPY NOTIFICATION */
+
+#copyNotify{
+position:fixed;
+bottom:30px;
+right:30px;
+background:#0a0a0a;
+border:1px solid #00ff9c;
+color:#00ff9c;
+padding:14px 20px;
+border-radius:8px;
+font-family:'Share Tech Mono';
+box-shadow:0 0 10px #00ff9c33;
+opacity:0;
+transform:translateY(20px);
+transition:0.4s;
+z-index:9999;
+}
+
+#copyNotify.show{
+opacity:1;
+transform:translateY(0);
+}
+
 </style>
 
 </head>
@@ -152,6 +176,7 @@ e.preventDefault();
 });
 
 </script>
+
 <body>
 
 <canvas class="matrix"></canvas>
@@ -187,6 +212,10 @@ Connecting to Shadow Network...
 </div>
 
 </div>
+
+<!-- COPY NOTIFICATION -->
+
+<div id="copyNotify">Script Copied ✔</div>
 
 <script>
 
@@ -233,7 +262,13 @@ copyText.setSelectionRange(0,99999);
 
 navigator.clipboard.writeText(copyText.value);
 
-alert("Script copied!");
+let notify = document.getElementById("copyNotify");
+
+notify.classList.add("show");
+
+setTimeout(()=>{
+notify.classList.remove("show");
+},2000);
 
 }
 
