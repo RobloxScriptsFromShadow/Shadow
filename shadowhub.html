@@ -1,9 +1,3 @@
-<script>
-if(sessionStorage.getItem("shadow_access") !== "granted"){
-window.location.href = "index.html";
-}
-</script>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,14 +7,9 @@ window.location.href = "index.html";
 <link href="https://fonts.googleapis.com/css2?family=Orbitron&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 
 <script>
-
-/* ACCESS PROTECTION */
-
 if(sessionStorage.getItem("shadow_access") !== "granted"){
-document.body.innerHTML = "<h1 style='color:red;text-align:center;margin-top:100px;'>ACCESS DENIED</h1>";
-throw new Error("Access Denied");
+window.location.href = "index.html";
 }
-
 </script>
 
 <style>
@@ -34,8 +23,6 @@ padding:60px;
 overflow-x:hidden;
 }
 
-/* MATRIX */
-
 .matrix{
 position:fixed;
 top:0;
@@ -43,29 +30,21 @@ left:0;
 z-index:-1;
 }
 
-/* HEADER */
-
 h1{
 font-family:'Orbitron';
 font-size:42px;
 margin-bottom:10px;
 }
 
-/* STATUS */
-
 .status{
 margin-bottom:20px;
 font-size:16px;
 }
 
-/* FEATURES */
-
 .features{
 margin-bottom:30px;
 line-height:1.6;
 }
-
-/* SCRIPT BOX */
 
 .scriptbox{
 background:#0a0a0a;
@@ -74,8 +53,6 @@ padding:25px;
 border-radius:10px;
 max-width:800px;
 }
-
-/* TEXTAREA */
 
 textarea{
 width:100%;
@@ -86,8 +63,6 @@ border:none;
 font-family:monospace;
 resize:none;
 }
-
-/* BUTTON */
 
 button{
 margin-top:20px;
@@ -104,8 +79,6 @@ background:#00ff9c;
 color:black;
 }
 
-/* VERIFY TEXT */
-
 .verifyText{
 margin-top:15px;
 opacity:0.8;
@@ -114,8 +87,6 @@ opacity:0.8;
 .hidden{
 display:none;
 }
-
-/* COPY NOTIFICATION */
 
 #copyNotify{
 position:fixed;
@@ -142,40 +113,6 @@ transform:translateY(0);
 </style>
 
 </head>
-
-
-
-<script>
-
-/* Disable Right Click */
-
-document.addEventListener("contextmenu", function(e){
-e.preventDefault();
-});
-
-/* Block common inspect shortcuts */
-
-document.addEventListener("keydown", function(e){
-
-if(e.key === "F12"){
-e.preventDefault();
-}
-
-if(e.ctrlKey && e.shiftKey && e.key === "I"){
-e.preventDefault();
-}
-
-if(e.ctrlKey && e.shiftKey && e.key === "C"){
-e.preventDefault();
-}
-
-if(e.ctrlKey && e.key === "U"){
-e.preventDefault();
-}
-
-});
-
-</script>
 
 <body>
 
@@ -205,7 +142,7 @@ Connecting to Shadow Network...
 
 <div id="scriptArea" class="hidden">
 
-<textarea id="script">loadstring(game:HttpGet("https://pastebin.com/raw/ha5Da5WE"))()</textarea>
+<textarea id="script"></textarea>
 
 <button onclick="copyScript()">Copy Script</button>
 
@@ -213,106 +150,106 @@ Connecting to Shadow Network...
 
 </div>
 
-<!-- COPY NOTIFICATION -->
-
 <div id="copyNotify">Script Copied ✔</div>
 
 <script>
 
-/* REMOVE ACCESS TOKEN AFTER LOAD */
+sessionStorage.removeItem("shadow_access")
 
-sessionStorage.removeItem("shadow_access");
-
-/* VERIFY SERVER ANIMATION */
+const encodedScript="bG9hZHN0cmluZyhnYW1lOkh0dHBHZXQoImh0dHBzOi8vcGFzdGViaW4uY29tL3Jhdy9oYTVEYTVXRSIpKSgp"
 
 function verifyServer(){
 
-let btn = document.getElementById("verifyBtn");
-let text = document.getElementById("verifyText");
+let btn=document.getElementById("verifyBtn")
+let text=document.getElementById("verifyText")
 
-btn.style.display = "none";
-text.classList.remove("hidden");
-
-setTimeout(()=>{
-text.innerText = "Authorizing user...";
-},1200);
+btn.style.display="none"
+text.classList.remove("hidden")
 
 setTimeout(()=>{
-text.innerText = "Decrypting script...";
-},2500);
+text.innerText="Authorizing user..."
+},1200)
 
 setTimeout(()=>{
-text.innerText = "Access Granted";
-},3500);
+text.innerText="Decrypting script..."
+},2500)
 
 setTimeout(()=>{
-text.style.display="none";
-document.getElementById("scriptArea").classList.remove("hidden");
-},4200);
+text.innerText="Access Granted"
+},3500)
+
+setTimeout(()=>{
+
+text.style.display="none"
+
+let script=atob(encodedScript)
+
+document.getElementById("script").value=script
+
+document.getElementById("scriptArea").classList.remove("hidden")
+
+},4200)
 
 }
-
-/* COPY SCRIPT */
 
 function copyScript(){
 
-var copyText = document.getElementById("script");
-copyText.select();
-copyText.setSelectionRange(0,99999);
+let copyText=document.getElementById("script")
 
-navigator.clipboard.writeText(copyText.value);
+copyText.select()
+copyText.setSelectionRange(0,99999)
 
-let notify = document.getElementById("copyNotify");
+navigator.clipboard.writeText(copyText.value)
 
-notify.classList.add("show");
+let notify=document.getElementById("copyNotify")
+
+notify.classList.add("show")
 
 setTimeout(()=>{
-notify.classList.remove("show");
-},2000);
+notify.classList.remove("show")
+},2000)
 
 }
 
-/* MATRIX BACKGROUND */
+const canvas=document.querySelector(".matrix")
+const ctx=canvas.getContext("2d")
 
-const canvas = document.querySelector(".matrix");
-const ctx = canvas.getContext("2d");
+canvas.height=window.innerHeight
+canvas.width=window.innerWidth
 
-canvas.height = window.innerHeight;
-canvas.width = window.innerWidth;
+const letters="01"
+const fontSize=14
+const columns=canvas.width/fontSize
 
-const letters = "01";
-const fontSize = 14;
-const columns = canvas.width / fontSize;
+const drops=[]
 
-const drops = [];
-
-for(let x = 0; x < columns; x++)
-drops[x] = 1;
+for(let x=0;x<columns;x++)
+drops[x]=1
 
 function draw(){
 
-ctx.fillStyle = "rgba(0,0,0,0.05)";
-ctx.fillRect(0,0,canvas.width,canvas.height);
+ctx.fillStyle="rgba(0,0,0,0.05)"
+ctx.fillRect(0,0,canvas.width,canvas.height)
 
-ctx.fillStyle = "#00ff9c";
-ctx.font = fontSize + "px monospace";
+ctx.fillStyle="#00ff9c"
+ctx.font=fontSize+"px monospace"
 
-for(let i = 0; i < drops.length; i++){
+for(let i=0;i<drops.length;i++){
 
-const text = letters.charAt(Math.floor(Math.random()*letters.length));
+const text=letters.charAt(Math.floor(Math.random()*letters.length))
 
-ctx.fillText(text, i*fontSize, drops[i]*fontSize);
+ctx.fillText(text,i*fontSize,drops[i]*fontSize)
 
-if(drops[i]*fontSize > canvas.height && Math.random() > 0.975)
-drops[i] = 0;
+if(drops[i]*fontSize>canvas.height&&Math.random()>0.975)
+drops[i]=0
 
-drops[i]++;
-
-}
+drops[i]++
 
 }
 
-setInterval(draw,33);
+}
+
+setInterval(draw,33)
 
 </script>
 
