@@ -9,6 +9,10 @@
 
 <style>
 
+html{
+scroll-behavior:smooth;
+}
+
 body{
 margin:0;
 background:#050505;
@@ -17,7 +21,7 @@ font-family:'Share Tech Mono', monospace;
 overflow-x:hidden;
 }
 
-/* LOADING SCREEN */
+/* LOADER */
 
 #loader{
 position:fixed;
@@ -110,6 +114,68 @@ to{text-shadow:0 0 30px #00ff9c}
 padding:80px 10%;
 }
 
+/* CATEGORY BUTTONS */
+
+.categoryButtons{
+display:flex;
+gap:10px;
+margin-bottom:15px;
+flex-wrap:wrap;
+}
+
+.categoryButtons button{
+background:#0a0a0a;
+border:1px solid #00ff9c33;
+color:#00ff9c;
+padding:8px 14px;
+cursor:pointer;
+border-radius:6px;
+font-family:'Share Tech Mono';
+transition:0.2s;
+}
+
+.categoryButtons button:hover{
+background:#00ff9c;
+color:black;
+}
+
+/* SCRIPT COUNTER */
+
+#scriptCounter{
+margin-bottom:20px;
+opacity:0.8;
+}
+
+/* FILTER BAR */
+
+.filterBar{
+display:flex;
+gap:15px;
+margin:10px 0 40px 0;
+flex-wrap:wrap;
+}
+
+#searchInput{
+flex:1;
+padding:10px;
+background:#0a0a0a;
+border:1px solid #00ff9c33;
+color:#00ff9c;
+border-radius:6px;
+font-family:'Share Tech Mono';
+}
+
+#gameFilter{
+padding:10px;
+background:#0a0a0a;
+border:1px solid #00ff9c33;
+color:#00ff9c;
+border-radius:6px;
+font-family:'Share Tech Mono';
+}
+
+/* GRID */
+
 .grid{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
@@ -126,6 +192,16 @@ border-radius:12px;
 transition:0.3s;
 position:relative;
 overflow:hidden;
+
+/* reveal animation */
+opacity:0;
+transform:translateY(30px);
+}
+
+.card.show{
+opacity:1;
+transform:translateY(0);
+transition:0.6s;
 }
 
 .card:before{
@@ -255,21 +331,12 @@ color:#00ff9c;
 cursor:pointer;
 }
 
-#passwordBox button:hover{
-background:#00ff9c;
-color:black;
-}
-
 .closeBtn{
 position:absolute;
 top:8px;
 right:12px;
 cursor:pointer;
 font-size:18px;
-}
-
-.closeBtn:hover{
-text-shadow:0 0 10px #00ff9c;
 }
 
 #checking{
@@ -306,13 +373,36 @@ display:none;
 </div>
 
 <div class="section" id="scripts">
+
 <h2>Scripts</h2>
+
+<div class="categoryButtons">
+<button onclick="setCategory('all')">All</button>
+<button onclick="setCategory('mm2')">MM2</button>
+<button onclick="setCategory('bladeball')">Blade Ball</button>
+<button onclick="setCategory('sab')">SAB</button>
+<button onclick="setCategory('universal')">Universal</button>
+</div>
+
+<div id="scriptCounter">Showing scripts...</div>
+
+<div class="filterBar">
+
+<input type="text" id="searchInput" placeholder="Search scripts...">
+
+<select id="gameFilter">
+<option value="all">All Games</option>
+<option value="mm2">MM2</option>
+<option value="bladeball">Blade Ball</option>
+<option value="sab">SAB</option>
+<option value="universal">Universal</option>
+</select>
+
+</div>
 
 <div class="grid">
 
-<!-- PAID SCRIPT -->
-
-<div class="card">
+<div class="card" data-game="mm2">
 
 <div class="paidBadge">🔒 PAID</div>
 
@@ -334,9 +424,7 @@ Features:
 
 </div>
 
-<!-- FREE SCRIPT -->
-
-<div class="card">
+<div class="card" data-game="sab">
 
 <h3>Chilli Hub (SAB)</h3>
 
@@ -358,8 +446,25 @@ Features:
 
 </div>
 
+<div class="card" data-game="bladeball">
 
-<div class="card">
+<h3>Simple Auto Parry - Blade ball</h3>
+
+<div class="status">
+Status: 🟢 Undetected - Doesnt work sometimes
+</div>
+
+<div class="features">
+Features:
+<br>• Auto Parry
+<br>• Keyless
+</div>
+
+<a class="button" href="Simple-AP-Bladeball.html">Get Script</a>
+
+</div>
+
+<div class="card" data-game="universal">
 
 <h3>Infinite Yield (Any Game)</h3>
 
@@ -371,7 +476,7 @@ Status: 🟢 Undetected
 Features:
 <br>• Fly
 <br>• Jump features
-<br>• Dark dex (Good for making your own hub, or trolling)
+<br>• Dark dex
 <br>• Noclip
 <br>• Speed change
 <br>• ESP
@@ -382,7 +487,6 @@ Features:
 <a class="button" href="inf-yield.html">Get Script</a>
 
 </div>
-
 
 </div>
 </div>
@@ -395,8 +499,6 @@ Features:
 <div class="footer">
 © 2026 Shadow Scripts
 </div>
-
-<!-- PASSWORD BOX -->
 
 <div id="passwordBox">
 
@@ -419,7 +521,7 @@ Features:
 /* LOADER */
 
 setTimeout(()=>{
- document.getElementById("loader").style.display="none";
+document.getElementById("loader").style.display="none";
 },3500)
 
 /* PASSWORD SYSTEM */
@@ -435,18 +537,12 @@ function closePassword(){
 document.getElementById("passwordBox").style.display="none";
 }
 
-/* HUB DATABASE */
-
 const HUBS = {
-
 mm2:{
 hash:"234c255a6ef679847c845691e9021fda36e4a49988a3bb01a172df99bce3f862",
 page:"shadowhub.html"
 }
-
 }
-
-
 
 async function checkPassword(){
 
@@ -482,6 +578,67 @@ alert("ACCESS DENIED");
 },1200);
 
 }
+
+/* SEARCH + FILTER */
+
+const searchInput = document.getElementById("searchInput");
+const gameFilter = document.getElementById("gameFilter");
+const cards = document.querySelectorAll(".card");
+const counter = document.getElementById("scriptCounter");
+
+let currentCategory = "all";
+
+function setCategory(cat){
+currentCategory = cat;
+filterScripts();
+}
+
+function filterScripts(){
+
+let search = searchInput.value.toLowerCase();
+let game = gameFilter.value;
+let visible = 0;
+
+cards.forEach(card=>{
+
+let title = card.querySelector("h3").innerText.toLowerCase();
+let cardGame = card.getAttribute("data-game");
+
+let matchSearch = title.includes(search);
+let matchGame = game === "all" || cardGame === game;
+let matchCategory = currentCategory === "all" || cardGame === currentCategory;
+
+if(matchSearch && matchGame && matchCategory){
+card.style.display="block";
+visible++;
+}else{
+card.style.display="none";
+}
+
+});
+
+counter.innerText = "Showing " + visible + " script(s)";
+
+}
+
+searchInput.addEventListener("input",filterScripts);
+gameFilter.addEventListener("change",filterScripts);
+
+filterScripts();
+
+/* SCROLL REVEAL */
+
+const observer = new IntersectionObserver(entries=>{
+entries.forEach(entry=>{
+if(entry.isIntersecting){
+entry.target.classList.add("show");
+}
+});
+});
+
+document.querySelectorAll(".card").forEach(card=>{
+observer.observe(card);
+});
 
 /* MATRIX BACKGROUND */
 
@@ -523,21 +680,6 @@ drops[i]++;
 }
 
 setInterval(draw,33);
-
-/* DEVTOOLS BLOCK */
-
-document.addEventListener("contextmenu",function(e){
-e.preventDefault();
-});
-
-document.addEventListener("keydown",function(e){
-
-if(e.key==="F12"){e.preventDefault();}
-if(e.ctrlKey && e.shiftKey && e.key==="I"){e.preventDefault();}
-if(e.ctrlKey && e.shiftKey && e.key==="C"){e.preventDefault();}
-if(e.ctrlKey && e.key==="U"){e.preventDefault();}
-
-});
 
 </script>
 
