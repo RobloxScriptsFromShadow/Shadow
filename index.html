@@ -153,9 +153,12 @@ background:black;border:1px solid #00ff9c;color:#00ff9c;padding:10px;margin-top:
 <div class="card" data-game="mm2">
 <div class="paidBadge">🔒 PAID</div>
 <h3>MM2 Shadow Hub</h3>
-<div class="status">Status: 🟢 Undetected</div>
 <div class="features">
-Features:<br>• ESP<br>• Role Detection<br>• Gun Notifier<br>• Auto Shoot
+Features:
+<br>• ESP
+<br>• Role Detection
+<br>• Gun Notifier
+<br>• Auto Shoot
 </div>
 <button class="button" onclick="openPassword('mm2')">Get Script</button>
 </div>
@@ -163,21 +166,43 @@ Features:<br>• ESP<br>• Role Detection<br>• Gun Notifier<br>• Auto Shoot
 <div class="card" data-game="sab">
 <h3>Chilli Hub (SAB)</h3>
 <div class="status">Status: 🟢 Undetected</div>
-<div class="features">Features:<br>• X Ray<br>• Multiple ESP'S<br>• Stealer<br>• Anti ragdoll<br>• Inf Jump<br>• And ALOT MORE!</div>
+<div class="features">
+Features:
+<br>• X Ray
+<br>• Multiple ESP'S
+<br>• Stealer
+<br>• Anti ragdoll
+<br>• Inf Jump
+<br>• And ALOT MORE!
+</div>
 <a class="button" href="Chilli-Hub.html">Get Script</a>
 </div>
 
 <div class="card" data-game="bladeball">
 <h3>Simple Auto Parry - Blade ball</h3>
 <div class="status">Status: 🟢 Undetected - Doesnt work sometimes</div>
-<div class="features">Features:<br>• Auto Parry<br>• Keyless</div>
+<div class="features">
+Features:
+<br>• Auto Parry
+<br>• Keyless 
+</div>
 <a class="button" href="Simple-AP-Bladeball.html">Get Script</a>
 </div>
 
 <div class="card" data-game="universal">
 <h3>Infinite Yield (Any Game)</h3>
 <div class="status">Status: 🟢 Undetected</div>
-<div class="features">Features:<br>• Fly<br>• Jump features<br>• Dark dex<br>• Noclip<br>• Speed change<br>• ESP<br>• Teleport to players<br>• And A LOT More!</div>
+<div class="features">
+Features:
+<br>• Fly
+<br>• Jump features
+<br>• Dark dex
+<br>• Noclip
+<br>• Speed change
+<br>• ESP
+<br>• Teleport to players
+<br>• And A LOT More!
+</div>
 <a class="button" href="inf-yield.html">Get Script</a>
 </div>
 
@@ -203,80 +228,222 @@ Features:<br>• ESP<br>• Role Detection<br>• Gun Notifier<br>• Auto Shoot
 </div>
 
 <script>
+
 setTimeout(()=>{document.getElementById("loader").style.display="none"},3500)
 
-let currentHub="";
-function openPassword(hub){currentHub=hub;document.getElementById("passwordBox").style.display="block"}
-function closePassword(){document.getElementById("passwordBox").style.display="none"}
+/* =========================
+   BASIC TAMPER PROTECTION
+========================= */
+
+document.addEventListener("contextmenu",e=>e.preventDefault())
+
+document.onkeydown=function(e){
+if(e.keyCode==123)return false
+if(e.ctrlKey&&e.shiftKey&&e.keyCode==73)return false
+if(e.ctrlKey&&e.shiftKey&&e.keyCode==74)return false
+if(e.ctrlKey&&e.keyCode==85)return false
+}
+
+/* =========================
+   DEVTOOLS DETECTION
+========================= */
+
+/* DEVTOOLS DETECTION (disabled for localhost / VSCode preview) */
+
+if(
+location.hostname !== "localhost" &&
+location.hostname !== "127.0.0.1"
+){
+
+setInterval(function(){
+
+const threshold=160
+
+if(
+window.outerWidth - window.innerWidth > threshold ||
+window.outerHeight - window.innerHeight > threshold
+){
+
+document.body.innerHTML="SECURITY LOCKED"
+
+}
+
+},1000)
+
+}
+
+
+/* =========================
+   PASSWORD SYSTEM
+========================= */
+
+let currentHub=""
+
+function openPassword(hub){
+currentHub=hub
+document.getElementById("passwordBox").style.display="block"
+}
+
+function closePassword(){
+document.getElementById("passwordBox").style.display="none"
+}
 
 const HUBS={
-mm2:{hash:"234c255a6ef679847c845691e9021fda36e4a49988a3bb01a172df99bce3f862",page:"shadowhub.html"}
+mm2:{
+hash:"234c255a6ef679847c845691e9021fda36e4a49988a3bb01a172df99bce3f862",
+page:"shadowhub.html"
+}
 }
 
 async function checkPassword(){
+
 let password=document.getElementById("pass").value
 let checking=document.getElementById("checking")
+
 checking.style.display="block"
+
 const encoder=new TextEncoder()
 const data=encoder.encode(password)
+
 const hashBuffer=await crypto.subtle.digest("SHA-256",data)
 const hashArray=Array.from(new Uint8Array(hashBuffer))
+
 const hashHex=hashArray.map(b=>b.toString(16).padStart(2,'0')).join('')
+
 let hub=HUBS[currentHub]
+
 setTimeout(()=>{
-if(hub && hashHex===hub.hash){sessionStorage.setItem("shadow_access","granted");window.location.href=hub.page}
-else{checking.style.display="none";alert("ACCESS DENIED")}
-},1200)
+
+if(hub && hashHex===hub.hash){
+
+sessionStorage.setItem("shadow_access","granted")
+sessionStorage.setItem("shadow_token",Math.random().toString(36))
+
+window.location.href=hub.page
+
+}else{
+
+checking.style.display="none"
+alert("ACCESS DENIED")
+
 }
+
+},1200)
+
+}
+
+
+/* =========================
+   SCRIPT FILTER SYSTEM
+========================= */
 
 const searchInput=document.getElementById("searchInput")
 const gameFilter=document.getElementById("gameFilter")
 const cards=document.querySelectorAll(".card")
 const counter=document.getElementById("scriptCounter")
+
 let currentCategory="all"
-function setCategory(cat){currentCategory=cat;filterScripts()}
+
+function setCategory(cat){
+currentCategory=cat
+filterScripts()
+}
+
 function filterScripts(){
+
 let search=searchInput.value.toLowerCase()
 let game=gameFilter.value
 let visible=0
+
 cards.forEach(card=>{
+
 let title=card.querySelector("h3").innerText.toLowerCase()
 let cardGame=card.getAttribute("data-game")
+
 let matchSearch=title.includes(search)
 let matchGame=game==="all"||cardGame===game
 let matchCategory=currentCategory==="all"||cardGame===currentCategory
-if(matchSearch&&matchGame&&matchCategory){card.style.display="block";visible++}else{card.style.display="none"}
-})
-counter.innerText="Showing "+visible+" script(s)"
+
+if(matchSearch&&matchGame&&matchCategory){
+
+card.style.display="block"
+visible++
+
+}else{
+
+card.style.display="none"
+
 }
+
+})
+
+counter.innerText="Showing "+visible+" script(s)"
+
+}
+
 searchInput.addEventListener("input",filterScripts)
 gameFilter.addEventListener("change",filterScripts)
+
 filterScripts()
 
-const observer=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add("show")}})})
+
+/* =========================
+   CARD ANIMATION
+========================= */
+
+const observer=new IntersectionObserver(entries=>{
+entries.forEach(entry=>{
+if(entry.isIntersecting){
+entry.target.classList.add("show")
+}
+})
+})
+
 document.querySelectorAll(".card").forEach(card=>observer.observe(card))
+
+
+/* =========================
+   MATRIX BACKGROUND
+========================= */
 
 const canvas=document.querySelector(".matrix")
 const ctx=canvas.getContext("2d")
+
 canvas.height=window.innerHeight
 canvas.width=window.innerWidth
+
 const letters="01"
 const fontSize=14
 const columns=canvas.width/fontSize
+
 const drops=[]
+
 for(let x=0;x<columns;x++)drops[x]=1
+
 function draw(){
+
 ctx.fillStyle="rgba(0,0,0,0.05)"
 ctx.fillRect(0,0,canvas.width,canvas.height)
+
 ctx.fillStyle="#00ff9c"
 ctx.font=fontSize+"px monospace"
+
 for(let i=0;i<drops.length;i++){
+
 const text=letters.charAt(Math.floor(Math.random()*letters.length))
+
 ctx.fillText(text,i*fontSize,drops[i]*fontSize)
+
 if(drops[i]*fontSize>canvas.height&&Math.random()>0.975)drops[i]=0
+
 drops[i]++
-}}
+
+}
+
+}
+
 setInterval(draw,33)
+
 </script>
 
 </body>
