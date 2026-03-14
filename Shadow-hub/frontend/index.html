@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shadow Scripts</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+html{scroll-behavior:smooth}
+body{
+margin:0;
+background:#050505;
+color:#00ff9c;
+font-family:'Share Tech Mono', monospace;
+overflow-x:hidden;
+}
+#loader{
+position:fixed;
+top:0;left:0;width:100%;height:100%;
+background:#000;
+display:flex;flex-direction:column;
+justify-content:center;align-items:center;
+z-index:9999;font-size:20px;
+}
+#loader span{opacity:0;animation:fade 2s forwards}
+#loader span:nth-child(2){animation-delay:1s}
+#loader span:nth-child(3){animation-delay:2s}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+nav{
+display:flex;
+justify-content:space-between;
+padding:20px 40px;
+background:rgba(0,0,0,0.6);
+backdrop-filter:blur(8px);
+border-bottom:1px solid #00ff9c33;
+}
+.logo{font-family:'Orbitron',sans-serif;font-size:22px;letter-spacing:2px;}
+nav a{color:#00ff9c;text-decoration:none;margin-left:20px;transition:0.3s}
+nav a:hover{text-shadow:0 0 10px #00ff9c}
+.hero{
+height:60vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+text-align:center;
+}
+.hero h1{
+font-size:60px;font-family:'Orbitron';margin:0;
+text-shadow:0 0 20px #00ff9c;
+animation:glow 3s infinite alternate;
+}
+.hero p{opacity:0.7;margin-top:10px;}
+@keyframes glow{from{text-shadow:0 0 10px #00ff9c}to{text-shadow:0 0 30px #00ff9c}}
+.section{padding:80px 10%;}
+.categoryButtons{display:flex;gap:10px;margin-bottom:15px;flex-wrap:wrap;}
+.categoryButtons button{
+background:#0a0a0a;border:1px solid #00ff9c33;color:#00ff9c;
+padding:8px 14px;cursor:pointer;border-radius:6px;
+font-family:'Share Tech Mono';transition:0.2s;
+}
+.categoryButtons button:hover{background:#00ff9c;color:black;}
+#scriptCounter{margin-bottom:20px;opacity:0.8;}
+.filterBar{display:flex;gap:15px;margin:10px 0 40px 0;flex-wrap:wrap;}
+#searchInput,#gameFilter{
+padding:10px;background:#0a0a0a;border:1px solid #00ff9c33;
+color:#00ff9c;border-radius:6px;font-family:'Share Tech Mono';
+}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:30px;}
+.card{
+background:#0a0a0a;border:1px solid #00ff9c33;padding:25px;border-radius:12px;
+transition:0.3s;position:relative;overflow:hidden;opacity:0;transform:translateY(30px);
+}
+.card.show{opacity:1;transform:translateY(0);transition:0.6s;}
+.card:before{
+content:"";position:absolute;top:-100%;left:0;width:100%;height:100%;
+background:linear-gradient(transparent,#00ff9c55,transparent);transition:0.5s;
+}
+.card:hover:before{top:100%}
+.card:hover{transform:translateY(-10px) scale(1.02);box-shadow:0 0 20px #00ff9c33;}
+.card h3{margin-top:0;font-family:'Orbitron'}
+.paidBadge{position:absolute;top:12px;right:12px;background:#ff0055;color:white;font-size:11px;padding:4px 8px;border-radius:6px;font-family:'Orbitron'}
+.status{margin-top:5px;font-size:13px;opacity:0.8}
+.features{margin-top:10px;font-size:13px;opacity:0.85}
+.button{display:inline-block;padding:10px 18px;border:1px solid #00ff9c;border-radius:6px;margin-top:15px;text-decoration:none;color:#00ff9c;transition:0.3s;cursor:pointer;background:none;}
+.button:hover{background:#00ff9c;color:black;box-shadow:0 0 10px #00ff9c}
+.footer{text-align:center;padding:40px;opacity:0.5;border-top:1px solid #00ff9c22}
+.matrix{position:fixed;top:0;left:0;z-index:-1}
+#passwordBox{
+display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
+background:#0a0a0a;border:1px solid #00ff9c;padding:35px;border-radius:10px;
+text-align:center;z-index:999;width:260px;
+}
+#passwordBox input{
+background:black;border:1px solid #00ff9c;color:#00ff9c;padding:10px;margin-top:10px;width:80%;
+}
+#passwordBox button{margin-top:15px;padding:10px 20px;background:black;border:1px solid #00ff9c;color:#00ff9c;cursor:pointer;}
+.closeBtn{position:absolute;top:8px;right:12px;cursor:pointer;font-size:18px;}
+#checking{margin-top:12px;font-size:13px;opacity:0.8;display:none;}
+</style>
+</head>
+
+<body>
+
+<div id="loader">
+<span>INITIALIZING SHADOW SYSTEM...</span>
+<span>CONNECTING TO SERVERS...</span>
+<span>ACCESS GRANTED</span>
+</div>
+
+<canvas class="matrix"></canvas>
+
+<nav>
+<div class="logo">SHADOW SCRIPTS</div>
+<div>
+<a href="#scripts">Scripts</a>
+<a href="#contact">Contact</a>
+</div>
+</nav>
+
+<div class="hero">
+<h1>SHADOW HUB</h1>
+<p>Scripts • Powerful • Undetected</p>
+</div>
+
+<div class="section" id="scripts">
+<h2>Scripts</h2>
+
+<div class="categoryButtons">
+<button onclick="setCategory('all')">All</button>
+<button onclick="setCategory('mm2')">MM2</button>
+<button onclick="setCategory('bladeball')">Blade Ball</button>
+<button onclick="setCategory('sab')">SAB</button>
+<button onclick="setCategory('universal')">Universal</button>
+</div>
+
+<div id="scriptCounter">Showing scripts...</div>
+
+<div class="filterBar">
+<input type="text" id="searchInput" placeholder="Search scripts...">
+<select id="gameFilter">
+<option value="all">All Games</option>
+<option value="mm2">MM2</option>
+<option value="bladeball">Blade Ball</option>
+<option value="sab">SAB</option>
+<option value="universal">Universal</option>
+</select>
+</div>
+
+<div class="grid">
+
+<div class="card" data-game="mm2">
+<div class="paidBadge">🔒 PAID</div>
+<h3>MM2 Shadow Hub</h3>
+<div class="features">
+Features:
+<br>• ESP
+<br>• Role Detection
+<br>• Gun Notifier
+<br>• Auto Shoot
+</div>
+<button class="button" onclick="openPassword('mm2')">Get Script</button>
+</div>
+
+<div class="card" data-game="sab">
+<h3>Chilli Hub (SAB)</h3>
+<div class="status">Status: 🟢 Undetected</div>
+<div class="features">
+Features:
+<br>• X Ray
+<br>• Multiple ESP'S
+<br>• Stealer
+<br>• Anti ragdoll
+<br>• Inf Jump
+<br>• And ALOT MORE!
+</div>
+<a class="button" href="Chilli-Hub.html">Get Script</a>
+</div>
+
+<div class="card" data-game="bladeball">
+<h3>Simple Auto Parry - Blade ball</h3>
+<div class="status">Status: 🟢 Undetected - Doesnt work sometimes</div>
+<div class="features">
+Features:
+<br>• Auto Parry
+<br>• Keyless 
+</div>
+<a class="button" href="Simple-AP-Bladeball.html">Get Script</a>
+</div>
+
+<div class="card" data-game="universal">
+<h3>Infinite Yield (Any Game)</h3>
+<div class="status">Status: 🟢 Undetected</div>
+<div class="features">
+Features:
+<br>• Fly
+<br>• Jump features
+<br>• Dark dex
+<br>• Noclip
+<br>• Speed change
+<br>• ESP
+<br>• Teleport to players
+<br>• And A LOT More!
+</div>
+<a class="button" href="inf-yield.html">Get Script</a>
+</div>
+
+</div>
+</div>
+
+<div class="section" id="contact">
+<h2>Contact</h2>
+<p>Discord: imjustthatguy1_11</p>
+</div>
+
+<div class="footer">
+© 2026 Shadow Scripts
+</div>
+
+<div id="passwordBox">
+<div class="closeBtn" onclick="closePassword()">✖</div>
+<h3>Enter Password</h3>
+<input type="password" id="pass" placeholder="Password">
+<br>
+<button onclick="checkPassword()">Unlock</button>
+<div id="checking">Checking key validity...</div>
+</div>
+
+<script>
+setTimeout(()=>{document.getElementById("loader").style.display="none"},3500)
+
+/* =========================
+   BASIC TAMPER PROTECTION
+========================= */
+document.addEventListener("contextmenu",e=>e.preventDefault())
+document.onkeydown=function(e){
+if(e.keyCode==123)return false
+if(e.ctrlKey&&e.shiftKey&&e.keyCode==73)return false
+if(e.ctrlKey&&e.shiftKey&&e.keyCode==74)return false
+if(e.ctrlKey&&e.keyCode==85)return false
+}
+
+/* =========================
+   DEVTOOLS DETECTION
+========================= */
+if(location.hostname !== "localhost" && location.hostname !== "127.0.0.1"){
+setInterval(function(){
+const threshold=160
+if(window.outerWidth - window.innerWidth > threshold || window.outerHeight - window.innerHeight > threshold){
+document.body.innerHTML="SECURITY LOCKED"
+}
+},1000)
+}
+
+/* =========================
+   PASSWORD SYSTEM (BACKEND)
+========================= */
+let currentHub = ""
+function openPassword(hub){
+  currentHub = hub
+  document.getElementById("passwordBox").style.display = "block"
+}
+function closePassword(){
+  document.getElementById("passwordBox").style.display = "none"
+}
+async function checkPassword(){
+  const password = document.getElementById("pass").value
+  const checking = document.getElementById("checking")
+  checking.style.display = "block"
+  try{
+    const response = await fetch("http://localhost:3000/check-password",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({hub: currentHub, password: password})
+    })
+    const data = await response.json()
+    if(data.success){
+      sessionStorage.setItem("shadow_token", data.token)
+      if(currentHub === "mm2") window.location.href = "shadowhub.html"
+    }else{
+      checking.style.display = "none"
+      alert("ACCESS DENIED")
+    }
+  }catch(err){
+    checking.style.display = "none"
+    alert("Server error")
+  }
+}
+
+/* =========================
+   SCRIPT FILTER SYSTEM
+========================= */
+const searchInput=document.getElementById("searchInput")
+const gameFilter=document.getElementById("gameFilter")
+const cards=document.querySelectorAll(".card")
+const counter=document.getElementById("scriptCounter")
+let currentCategory="all"
+function setCategory(cat){currentCategory=cat;filterScripts()}
+function filterScripts(){
+let search=searchInput.value.toLowerCase()
+let game=gameFilter.value
+let visible=0
+cards.forEach(card=>{
+let title=card.querySelector("h3").innerText.toLowerCase()
+let cardGame=card.getAttribute("data-game")
+let matchSearch=title.includes(search)
+let matchGame=game==="all"||cardGame===game
+let matchCategory=currentCategory==="all"||cardGame===currentCategory
+if(matchSearch&&matchGame&&matchCategory){card.style.display="block";visible++}else{card.style.display="none"}
+})
+counter.innerText="Showing "+visible+" script(s)"
+}
+searchInput.addEventListener("input",filterScripts)
+gameFilter.addEventListener("change",filterScripts)
+filterScripts()
+
+/* =========================
+   CARD ANIMATION
+========================= */
+const observer=new IntersectionObserver(entries=>{
+entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add("show")}})
+})
+document.querySelectorAll(".card").forEach(card=>observer.observe(card))
+
+/* =========================
+   MATRIX BACKGROUND
+========================= */
+const canvas=document.querySelector(".matrix")
+const ctx=canvas.getContext("2d")
+canvas.height=window.innerHeight
+canvas.width=window.innerWidth
+const letters="01"
+const fontSize=14
+const columns=canvas.width/fontSize
+const drops=[]
+for(let x=0;x<columns;x++)drops[x]=1
+function draw(){
+ctx.fillStyle="rgba(0,0,0,0.05)"
+ctx.fillRect(0,0,canvas.width,canvas.height)
+ctx.fillStyle="#00ff9c"
+ctx.font=fontSize+"px monospace"
+for(let i=0;i<drops.length;i++){
+const text=letters.charAt(Math.floor(Math.random()*letters.length))
+ctx.fillText(text,i*fontSize,drops[i]*fontSize)
+if(drops[i]*fontSize>canvas.height&&Math.random()>0.975)drops[i]=0
+drops[i]++
+}
+}
+setInterval(draw,33)
+</script>
+
+</body>
+</html>
